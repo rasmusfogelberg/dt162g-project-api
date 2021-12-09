@@ -10,7 +10,8 @@ import {
   findAll,
   findSingle,
   remove,
-  create
+  create,
+  update
 } from './workouts.service';
 
 export const workoutsRouter = express.Router();
@@ -73,15 +74,13 @@ workoutsRouter.delete('/:id', async (req, res) => {
 workoutsRouter.post('/', async (req, res) => {
   try {
     const {
-      code,
       name,
-      semester
+      exercises
     } = req.body;
 
     await create({
-      code,
       name,
-      semester
+      exercises
     });
 
     res.status(200).send({
@@ -90,6 +89,32 @@ workoutsRouter.post('/', async (req, res) => {
   } catch (error) {
     res.status(500).send({
       message: `Sever error ${error}`
+    });
+  }
+});
+
+workoutsRouter.put('/:id', async (req, res) => {
+  try {
+    const {
+      id
+    } = req.params;
+
+    const {
+      name,
+      exercises
+    } = req.body;
+
+    await update({
+      id,
+      name,
+      exercises
+    });
+    res.status(200).send({
+      message: 'Successfully updated'
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: `Server error ${error}`
     });
   }
 });
