@@ -14,6 +14,7 @@ dotenv.config();
 import {
   workoutsRouter
 } from './workouts/workouts.router';
+import { exercisesRouter } from './exercises/exercises.router';
 
 // Declaring uri from the information set in .env file.
 const uri = `${process.env.MONGO_URI}/${process.env.MONGO_DB_NAME}`;
@@ -39,6 +40,7 @@ const uri = `${process.env.MONGO_URI}/${process.env.MONGO_DB_NAME}`;
 
     // Setup routes
     app.use('/workouts', workoutsRouter);
+    app.use('/exercises', exercisesRouter);
 
     // When server is started it will print this message in the console
     app.listen(port, () => {
