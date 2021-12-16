@@ -29,8 +29,9 @@ const uri = `${process.env.MONGO_URI}/${process.env.MONGO_DB_NAME}`;
     // Setting the imported express to the variable app
     const app = express();
 
-    // Port for localhost set to 3000
-    const port = 3000;
+    // Port for localhost set to what there is in .env
+    // If .env has no value for port it will default to 3000
+    const port = process.env.LOCAL_PORT || 3000;
 
     // Using cors to allow all requests from a client
     app.use(cors());

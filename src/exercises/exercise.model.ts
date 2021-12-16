@@ -1,13 +1,13 @@
-/* 
+/*
  * This file contains the model for the schema in the database
  *
- * 
+ *
  */
 
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-// Model for a set. 
-export const setSchema = new mongoose.Schema({
+// Model for a set.
+/* export const setSchema = new mongoose.Schema({
   weight: {
     type: Number,
     required: true,
@@ -15,16 +15,16 @@ export const setSchema = new mongoose.Schema({
   reps: {
     type: Number,
     required: true,
-    min: 1
+    min: 0
   }
-})
+}) */
 
 export const exerciseSchema = new mongoose.Schema({
-  name: { 
+  name: {
     type: String,
     required: true,
   },
-  sets: [setSchema]
+  sets: Array
 });
 
 const Exercise = mongoose.model('Exercise', exerciseSchema);

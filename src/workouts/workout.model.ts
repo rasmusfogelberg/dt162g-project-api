@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { exerciseSchema } from "../exercises/exercise.model";
 
 const workoutSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   name: {
     type: String,
     required: true,
