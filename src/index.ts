@@ -50,8 +50,5 @@ const uri = `${process.env.MONGO_URI}/${process.env.MONGO_DB_NAME}`;
   } catch (error) {
     console.log(`Error: ${error}`);
     process.exit(1); // Exit the process with error code
-  } finally {
-    // Always close connections when done or on errors
-    // await mongoose.disconnect();
   }
 })();
