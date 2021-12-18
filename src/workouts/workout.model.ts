@@ -12,6 +12,12 @@ const workoutSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  startedDate: {
+    type: Date
+  },
+  endedDate: {
+    type: Date
+  },
   exercises: [exerciseSchema]
 });
 

@@ -6,6 +6,8 @@ import Workout from './workout.model';
 interface IWorkout {
   id?: string;
   name: string;
+  startedDate: string;
+  endedDate?: string;
   exercises?: IExercise[];
 }
 
@@ -34,8 +36,6 @@ export const update = async (partialWorkout: IWorkout) => {
 
 export const updateExercisesForWorkout = async (workoutId: any, exercises: any) => {
   const bulkUpdates = exercises.map((exercise: any) => {
-    console.log(exercise);
-
     return {
       updateOne: {
         filter: { name: exercise.name },
@@ -48,7 +48,7 @@ export const updateExercisesForWorkout = async (workoutId: any, exercises: any) 
   try {
     await Exercise.bulkWrite(bulkUpdates);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return await Workout.findByIdAndUpdate({ _id: new ObjectId(workoutId) }, { $set: { exercises: exercises } });

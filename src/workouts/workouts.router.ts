@@ -6,6 +6,8 @@
  */
 
 import express from 'express';
+import { body, validationResult } from 'express-validator';
+
 import { findAll, findSingle, remove, create, update, updateExercisesForWorkout } from './workouts.service';
 
 export const workoutsRouter = express.Router();
@@ -63,11 +65,12 @@ workoutsRouter.delete('/:id', async (req, res) => {
 // Create a workout
 workoutsRouter.post('/', async (req, res) => {
   try {
-    const { name, exercises } = req.body;
+    const { name, startedDate, exercises } = req.body;
 
     const createdWorkout = await create({
       name,
       exercises,
+      startedDate
     });
 
     res.status(200).send({
@@ -81,19 +84,55 @@ workoutsRouter.post('/', async (req, res) => {
   }
 });
 
-workoutsRouter.put('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
+workoutsRouter.put(
+  '/:id',
+  body('startedDate').exists(),
+  body('endedDate').custom((value, { req }) => {
+    if (new Date(value) <= new Date(req.body.startedDate)) {
+      throw new Error('Ended date must be valid, and after started date');
+    }
+    return true;
+  }),
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const { id } = req.params;
+      const { name, startedDate, endedDate, exercises } = req.body;
 
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+      }
+
+      await update({
+        id,
+        name,
+        startedDate,
+        endedDate,
+        exercises,
+      });
+
+      res.status(200).send({
+        message: 'Successfully updated',
+      });
+
+    } catch (error) {
+      res.status(500).send({
+        message: `Server error ${error}`,
+      });
+    }
+  },
+);
+
+workoutsRouter.put('/:workoutId/batch', async (req, res) => {
+  try {
+    const { workoutId } = req.params;
     const { name, exercises } = req.body;
 
-    await update({
-      id,
-      name,
-      exercises,
-    });
+    await updateExercisesForWorkout(workoutId, exercises);
+
     res.status(200).send({
-      message: 'Successfully updated',
+      message: 'Successfully updated workout',
     });
   } catch (error) {
     res.status(500).send({
@@ -102,10 +141,10 @@ workoutsRouter.put('/:id', async (req, res) => {
   }
 });
 
-workoutsRouter.put('/:workoutId/batch', async (req, res) => {
+workoutsRouter.put('/:workoutId/finish', async (req, res) => {
   try {
     const { workoutId } = req.params;
-    const { name, exercises } = req.body;
+    const { name, startedAt, endedAt, exercises } = req.body;
 
     await updateExercisesForWorkout(workoutId, exercises);
 
