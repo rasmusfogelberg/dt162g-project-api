@@ -12,7 +12,7 @@ import { findAll, findSingle, remove, create, update, updateExercisesForWorkout 
 
 export const workoutsRouter = express.Router();
 
-// Get all workouts
+// Get all Workouts
 workoutsRouter.get('/', async (_req, res) => {
   try {
     const workouts = await findAll();
@@ -24,7 +24,7 @@ workoutsRouter.get('/', async (_req, res) => {
   }
 });
 
-// Get single workout
+// Get single Workout
 workoutsRouter.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -47,7 +47,7 @@ workoutsRouter.get('/:id', async (req, res) => {
   }
 });
 
-// Delete single workout
+// Delete single Workout
 workoutsRouter.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -62,7 +62,7 @@ workoutsRouter.delete('/:id', async (req, res) => {
   }
 });
 
-// Create a workout
+// Create a Workout that will later be updated when saved
 workoutsRouter.post('/', async (req, res) => {
   try {
     const { name, startedDate, exercises } = req.body;
@@ -84,6 +84,7 @@ workoutsRouter.post('/', async (req, res) => {
   }
 });
 
+// Update a Workout
 workoutsRouter.put(
   '/:id',
   body('startedDate').exists(),
@@ -124,6 +125,7 @@ workoutsRouter.put(
   },
 );
 
+// Update a workout with a batch of exercises
 workoutsRouter.put('/:workoutId/batch', async (req, res) => {
   try {
     const { workoutId } = req.params;
@@ -141,6 +143,7 @@ workoutsRouter.put('/:workoutId/batch', async (req, res) => {
   }
 });
 
+// Update a finished workout that has been edited
 workoutsRouter.put('/:workoutId/finish', async (req, res) => {
   try {
     const { workoutId } = req.params;
